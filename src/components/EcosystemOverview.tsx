@@ -191,7 +191,7 @@ export const EcosystemOverview: React.FC<EcosystemProps> = ({ onSelectRole }) =>
             <span className="text-lime">Every Solar Professional.</span>
           </h2>
           <p className="mt-3 text-sm text-warm-muted max-w-2xl mx-auto leading-relaxed font-mono">
-            Whether you manufacture, install, trade, or consult — SolarPort is built for your workflow,
+            Whether you manufacture, install, trade, or consult — Helios Grid is built for your workflow,
             compliance needs, and payment security.
           </p>
         </div>
@@ -237,6 +237,8 @@ export const EcosystemOverview: React.FC<EcosystemProps> = ({ onSelectRole }) =>
               key={persona.id + '-img'}
               src={persona.image}
               alt={persona.headline}
+              loading="lazy"
+              decoding="async"
               referrerPolicy="no-referrer"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
               onError={(e) => {
@@ -332,10 +334,17 @@ export const EcosystemOverview: React.FC<EcosystemProps> = ({ onSelectRole }) =>
               <button
                 onClick={() => {
                   onSelectRole(persona.id);
-                  const el = document.getElementById('pathways');
+                  const targetMap: Record<StakeholderRole, string> = {
+                    vendor: 'vendor-workflow',
+                    trader: 'installer-workflow',
+                    enterprise: 'distributor-workflow',
+                    consultant: 'case-studies',
+                  };
+                  const targetId = targetMap[persona.id] || 'vendor-workflow';
+                  const el = document.getElementById(targetId);
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-forest-950 transition-all hover:scale-105 active:scale-100"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-forest-950 transition-all hover:scale-105 active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
                 style={{
                   backgroundColor: persona.accentColor,
                   boxShadow: `0 4px 20px -4px ${persona.accentColor}80`,

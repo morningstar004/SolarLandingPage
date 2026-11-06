@@ -54,7 +54,7 @@ const VENDOR_WORKFLOWS: VendorWorkflowItem[] = [
       'Programmatic stock reservations with price lock guarantee',
       'Automated GST 18% input credit reconciliation invoice'
     ],
-    screenUrl: 'app.solarport.in/vendor/inventory/spot-book',
+    screenUrl: 'app.heliosgrid.in/vendor/inventory/spot-book',
     screenTitle: 'Depot Hardware Reservation Desk',
     badge: '18.4 MWp IN STOCK'
   },
@@ -71,7 +71,7 @@ const VENDOR_WORKFLOWS: VendorWorkflowItem[] = [
       'Pallet barcode verification to prevent counterfeit modules',
       'Zero checkpost stoppage guarantee with digital challans'
     ],
-    screenUrl: 'app.solarport.in/vendor/orders/freight-tracker',
+    screenUrl: 'app.heliosgrid.in/vendor/orders/freight-tracker',
     screenTitle: 'Active Consignment & e-Way Tracking',
     badge: '3 ACTIVE SHIPMENTS'
   },
@@ -88,7 +88,7 @@ const VENDOR_WORKFLOWS: VendorWorkflowItem[] = [
       'Daily geotagged photographic progress logs from rooftop sites',
       'Milestone-based crew payouts released upon quality sign-off'
     ],
-    screenUrl: 'app.solarport.in/vendor/crews/installer-directory',
+    screenUrl: 'app.heliosgrid.in/vendor/crews/installer-directory',
     screenTitle: 'Verified Electricians & Crew Fleet',
     badge: '42 CREWS VERIFIED'
   },
@@ -105,7 +105,7 @@ const VENDOR_WORKFLOWS: VendorWorkflowItem[] = [
       'Customer portal with live solar generation & bill savings tracker',
       'Automated warranty registration & 5-year O&M service schedule'
     ],
-    screenUrl: 'app.solarport.in/vendor/crm/discom-pipeline',
+    screenUrl: 'app.heliosgrid.in/vendor/crm/discom-pipeline',
     screenTitle: 'Customer Rooftop CRM & DISCOM Approvals',
     badge: '28 ACTIVE PROJECTS'
   }
@@ -259,7 +259,7 @@ export const VendorWorkflow: React.FC<VendorWorkflowProps> = ({
                   {/* Active Browser Tab (Neutral Dark Gray Chrome Tab) */}
                   <div className="flex items-center gap-2 px-3 py-1.5 rounded-t-lg bg-[#27282b] border-t border-x border-neutral-700/50 text-[11px] font-sans text-neutral-200 max-w-[190px] shadow-sm">
                     <Layers className="w-3 h-3 text-neutral-400 shrink-0" />
-                    <span className="truncate text-[10px] font-medium text-neutral-200">SolarPort Vendor</span>
+                    <span className="truncate text-[10px] font-medium text-neutral-200">Helios Grid Vendor</span>
                     <span className="text-[10px] text-neutral-400 hover:text-white ml-auto">×</span>
                   </div>
 

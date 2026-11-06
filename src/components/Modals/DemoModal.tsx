@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, CheckCircle, Shield, ArrowRight, Zap, Copy, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { StakeholderRole } from '../../types';
@@ -30,6 +30,33 @@ export const DemoModal: React.FC<DemoModalProps> = ({
   const [copiedKey, setCopiedKey] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Sync role when defaultRole changes
+  useEffect(() => {
+    if (defaultRole) {
+      setFormData(prev => ({ ...prev, role: defaultRole }));
+    }
+  }, [defaultRole]);
+
+  // Handle Escape key and body scroll lock
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -57,13 +84,21 @@ export const DemoModal: React.FC<DemoModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="demo-modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
+    >
       <div className="relative w-full max-w-xl rounded-2xl bg-forest-900 border border-lime/30 shadow-2xl shadow-lime/10 overflow-hidden">
         <div className="h-1.5 w-full bg-gradient-to-r from-forest-600 via-lime to-solar-yellow" />
 
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-lg text-warm-muted hover:text-white hover:bg-forest-800 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-lg text-warm-muted hover:text-white hover:bg-forest-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
           aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
@@ -80,7 +115,7 @@ export const DemoModal: React.FC<DemoModalProps> = ({
                 <span className="text-xs text-warm-muted font-mono">Step 1 of 2</span>
               </div>
 
-              <h3 className="text-xl sm:text-2xl font-bold text-warm-white tracking-tight">
+              <h3 id="demo-modal-title" className="text-xl sm:text-2xl font-bold text-warm-white tracking-tight">
                 Experience the Helios Solar Operating System
               </h3>
               <p className="text-xs text-warm-muted mt-1 leading-relaxed font-mono">
@@ -142,10 +177,10 @@ export const DemoModal: React.FC<DemoModalProps> = ({
                       onChange={(e) => setFormData({ ...formData, role: e.target.value as StakeholderRole })}
                       className="w-full px-3 py-2 rounded-lg bg-forest-800/80 border border-white/10 text-white text-xs font-mono focus:outline-none focus:border-lime"
                     >
-                      <option value="vendor">Solar EPC / Rooftop Installer</option>
-                      <option value="trader">Port Stockist / Distributor</option>
-                      <option value="consultant">Chartered Engineer / CEIG Consultant</option>
-                      <option value="enterprise">Factory / C&I Corporate Buyer</option>
+                      <option value="vendor">Solar Vendor / OEM</option>
+                      <option value="trader">Solar Installer & Field Crew</option>
+                      <option value="enterprise">Trader & Wholesale Distributor</option>
+                      <option value="consultant">Solar Consultant & Support</option>
                     </select>
                   </div>
                 </div>

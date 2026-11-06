@@ -1,38 +1,5 @@
 export type StakeholderRole = 'vendor' | 'trader' | 'consultant' | 'enterprise';
 
-export interface UserSegment {
-  id: StakeholderRole;
-  title: string;
-  badge: string;
-  tagline: string;
-  image: string;
-  heroMetric: {
-    value: string;
-    label: string;
-    sublabel: string;
-  };
-  keyFeatures: string[];
-  capabilities: {
-    title: string;
-    description: string;
-    badge: string;
-    icon: string;
-  }[];
-  testimonial: {
-    quote: string;
-    author: string;
-    role: string;
-    company: string;
-    location: string;
-    avatar: string;
-  };
-  uiPreview: {
-    headline: string;
-    stats: { label: string; value: string; trend: string }[];
-    recentActivity: { id: string; title: string; meta: string; status: string }[];
-  };
-}
-
 export interface SolarProduct {
   id: string;
   category: 'module' | 'inverter' | 'storage' | 'mounting';
@@ -51,22 +18,6 @@ export interface SolarProduct {
   trend: 'up' | 'down' | 'neutral';
   trendValue: string;
   image: string;
-}
-
-export interface WorkflowStep {
-  step: string;
-  title: string;
-  subtitle: string;
-  image: string;
-  actionText: string;
-  highlightPills: string[];
-  metrics: { label: string; value: string }[];
-  terminalOutput: {
-    command: string;
-    timestamp: string;
-    outputLines: string[];
-    statusBadge: string;
-  };
 }
 
 export interface CaseStudy {

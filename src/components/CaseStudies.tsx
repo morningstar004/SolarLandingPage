@@ -246,6 +246,7 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({ onOpenDemo, onSuccessT
                       src={currentCase.image}
                       alt={currentCase.company}
                       loading="lazy"
+                      decoding="async"
                       onError={(e) => {
                         const target = e.currentTarget;
                         if (!target.src.includes('unsplash')) {

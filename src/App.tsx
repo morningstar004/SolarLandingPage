@@ -10,13 +10,14 @@ import { CaseStudies } from './components/CaseStudies';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { LeftDotsNavigator } from './components/LeftDotsNavigator';
-
-import { DemoModal } from './components/Modals/DemoModal';
-import { RfqModal } from './components/Modals/RfqModal';
-import { AuthModal } from './components/Modals/AuthModal';
 import { ToastContainer } from './components/Toast';
 
 import { StakeholderRole, SolarProduct, ToastMessage } from './types';
+
+// Code-split interactive modals to minimize initial bundle size and speed up page load
+const DemoModal = React.lazy(() => import('./components/Modals/DemoModal').then((m) => ({ default: m.DemoModal })));
+const RfqModal = React.lazy(() => import('./components/Modals/RfqModal').then((m) => ({ default: m.RfqModal })));
+const AuthModal = React.lazy(() => import('./components/Modals/AuthModal').then((m) => ({ default: m.AuthModal })));
 
 export function App() {
   const [toasts, setToasts] = useState<ToastMessage[]>([
@@ -160,28 +161,40 @@ export function App() {
         onSuccessToast={addToast}
       />
 
-      {/* Interactive Modals */}
-      <DemoModal
-        isOpen={isDemoModalOpen}
-        onClose={() => setIsDemoModalOpen(false)}
-        defaultRole={activeRoleForDemo}
-        onSuccessToast={addToast}
-      />
+      {/* Lazy-loaded Interactive Modals */}
+      {isDemoModalOpen && (
+        <React.Suspense fallback={null}>
+          <DemoModal
+            isOpen={isDemoModalOpen}
+            onClose={() => setIsDemoModalOpen(false)}
+            defaultRole={activeRoleForDemo}
+            onSuccessToast={addToast}
+          />
+        </React.Suspense>
+      )}
 
-      <RfqModal
-        isOpen={isRfqModalOpen}
-        onClose={() => setIsRfqModalOpen(false)}
-        initialProduct={selectedProductForRfq}
-        onSuccessToast={addToast}
-      />
+      {isRfqModalOpen && (
+        <React.Suspense fallback={null}>
+          <RfqModal
+            isOpen={isRfqModalOpen}
+            onClose={() => setIsRfqModalOpen(false)}
+            initialProduct={selectedProductForRfq}
+            onSuccessToast={addToast}
+          />
+        </React.Suspense>
+      )}
 
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onSuccessToast={addToast}
-        currentUser={currentUser}
-        onSelectUser={(u) => setCurrentUser(u)}
-      />
+      {isAuthModalOpen && (
+        <React.Suspense fallback={null}>
+          <AuthModal
+            isOpen={isAuthModalOpen}
+            onClose={() => setIsAuthModalOpen(false)}
+            onSuccessToast={addToast}
+            currentUser={currentUser}
+            onSelectUser={(u) => setCurrentUser(u)}
+          />
+        </React.Suspense>
+      )}
 
       {/* Toast Alert Feedback */}
       <ToastContainer

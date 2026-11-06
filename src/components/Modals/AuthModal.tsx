@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Shield, ArrowRight, UserCheck, CheckCircle2 } from 'lucide-react';
 import { StakeholderRole } from '../../types';
 
@@ -20,6 +20,26 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [activeTab, setActiveTab] = useState<'signin' | 'persona'>('persona');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  // Handle Escape key and body scroll lock
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -72,13 +92,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="auth-modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
+    >
       <div className="relative w-full max-w-lg rounded-2xl bg-forest-900 border border-lime/30 shadow-2xl overflow-hidden">
         <div className="h-1.5 w-full bg-gradient-to-r from-forest-600 via-lime to-solar-yellow" />
 
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-lg text-warm-muted hover:text-white hover:bg-forest-800 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-lg text-warm-muted hover:text-white hover:bg-forest-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
           aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
@@ -92,7 +120,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </span>
           </div>
 
-          <h3 className="text-xl sm:text-2xl font-bold text-warm-white">Access Helios Grid India</h3>
+          <h3 id="auth-modal-title" className="text-xl sm:text-2xl font-bold text-warm-white">Access Helios Grid India</h3>
           <p className="text-xs text-warm-muted mt-0.5 font-mono">
             Choose an Indian stakeholder persona or sign in with corporate credentials.
           </p>

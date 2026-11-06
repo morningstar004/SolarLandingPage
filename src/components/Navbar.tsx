@@ -33,6 +33,18 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile drawer on Escape key
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
+
   // Initials for avatar
   const getInitials = (name: string) => {
     const parts = name.split(' ');
@@ -210,15 +222,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={() => onOpenDemo()}
-              className="lightning-button px-3 py-1.5 rounded-lg text-xs font-bold text-forest-950 bg-lime whitespace-nowrap flex items-center gap-1.5"
+              className="lightning-button px-3 py-1.5 rounded-lg text-xs font-bold text-forest-950 bg-lime whitespace-nowrap flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
             >
               <Zap className="w-3 h-3 fill-forest-950" />
               <span>Access</span>
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1.5 rounded-lg text-warm-white hover:bg-forest-800 transition-colors"
+              className="p-1.5 rounded-lg text-warm-white hover:bg-forest-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
               aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Calculator, PackageCheck, Send, ShieldCheck, FileCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SOLAR_PRODUCTS } from '../../data/mockData';
@@ -24,6 +24,33 @@ export const RfqModal: React.FC<RfqModalProps> = ({
   const [deliveryDepot, setDeliveryDepot] = useState<string>('Bhiwandi Clean Hub');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  // Sync initialProduct when provided
+  useEffect(() => {
+    if (initialProduct?.id) {
+      setSelectedProductId(initialProduct.id);
+    }
+  }, [initialProduct]);
+
+  // Handle Escape key and body scroll lock
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -59,13 +86,21 @@ export const RfqModal: React.FC<RfqModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="rfq-modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
+    >
       <div className="relative w-full max-w-xl rounded-2xl bg-forest-900 border border-lime/30 shadow-2xl overflow-hidden">
         <div className="h-1.5 w-full bg-gradient-to-r from-forest-600 via-lime to-solar-yellow" />
 
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-lg text-warm-muted hover:text-white hover:bg-forest-800 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-lg text-warm-muted hover:text-white hover:bg-forest-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
           aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
@@ -82,7 +117,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({
                 <span className="text-xs text-warm-muted font-mono">ALMM List-I Direct</span>
               </div>
 
-              <h3 className="text-xl sm:text-2xl font-bold text-warm-white">
+              <h3 id="rfq-modal-title" className="text-xl sm:text-2xl font-bold text-warm-white">
                 Request Spot Allocation
               </h3>
               <p className="text-xs text-warm-muted mt-0.5 font-mono">

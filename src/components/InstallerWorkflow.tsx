@@ -284,7 +284,7 @@ export const InstallerWorkflow: React.FC<InstallerWorkflowProps> = ({
               <div className="mb-5">
                 <span className="text-xs font-mono uppercase tracking-wider text-lime font-bold flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-lime" />
-                  <span>Why Installation Crews Choose SolarPort</span>
+                  <span>Why Installation Crews Choose Helios Grid</span>
                 </span>
                 <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1.5 leading-snug">
                   Built to eliminate wage disputes, delayed retainages, and paperwork friction.
